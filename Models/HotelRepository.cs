@@ -7,15 +7,18 @@ public class HotelRepository : IHotelRepository
     {
         _context = context;
     }
-    public Task<List<Hotel>> GetHotelsAsync() =>
-        _context.Hotels.ToListAsync();
+    public async Task<List<Hotel>> GetHotelsAsync() =>
+        await _context.Hotels.ToListAsync();
+
+    public async Task<List<Hotel>> GetHotelsAsync(string name) =>
+        await _context.Hotels.Where(h => h.Name.Contains(name)).ToListAsync();
 
     public async Task<Hotel> GetHotelAsync(int hotelId) =>
         await _context.Hotels.FindAsync(new object[] {hotelId});
 
-    public async Task AddHotelAsync(Hotel hotel) => await _context.Hotels.AddAsync(hotel);
+    public async Task AddHotelAsync(Hotel hotel) => 
+        await _context.Hotels.AddAsync(hotel);
 
-    
     public async Task UpdateHotelAsync(Hotel hotel)
     {
         var hotelFromDb = await _context.Hotels.FindAsync(new object[] {hotel.Id});
