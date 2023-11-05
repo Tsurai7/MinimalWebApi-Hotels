@@ -10,4 +10,12 @@ public record Coordinate(double Latitude, double Longtitude)
         coordinate = new(lat, lon);
         return true;
     }
+
+    public static async ValueTask<Coordinate?> BindAsync(HttpContext context,
+    ParameterInfo parameter)
+    {
+        var input = context.GetRouteValue(parameter.Name!) as string ?? string.Empty;
+        TryParse(input, out var coordinate);
+        return coordinate;
+    }
 }
