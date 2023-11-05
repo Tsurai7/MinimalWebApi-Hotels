@@ -1,35 +1,6 @@
-
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<HotelDb>(options => 
-{
-    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
-});
-
-
-builder.Services.AddScoped<IHotelRepository, HotelRepository>();
-builder.Services.AddSingleton<ITokenService>(new TokenService());
-builder.Services.AddSingleton<IUserRepository>(new UserRepository());
-
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(          
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
+RegisterServices(builder.Services);
 
 var app = builder.Build();
 
@@ -135,3 +106,36 @@ app.MapDelete("hotels/{id}", [Authorize] async (int id, IHotelRepository reposit
 app.UseHttpsRedirection();
 
 app.Run();
+
+void RegisterServices(IServiceCollection services)
+{
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen();
+
+    services.AddDbContext<HotelDb>(options => 
+    {
+        options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+    });
+
+
+    services.AddScoped<IHotelRepository, HotelRepository>();
+    services.AddSingleton<ITokenService>(new TokenService());
+    services.AddSingleton<IUserRepository>(new UserRepository());
+
+    services.AddAuthorization();
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(          
+                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            };
+        });
+}
