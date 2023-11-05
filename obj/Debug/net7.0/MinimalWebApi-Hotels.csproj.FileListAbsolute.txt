@@ -62,3 +62,11 @@ E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.d
 E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 E:\GitHub\MinimalWebApi-Hotels\obj\Debug\net7.0\MinimalWebApi-Hotels.MvcApplicationPartsAssemblyInfo.cs
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+E:\GitHub\MinimalWebApi-Hotels\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
