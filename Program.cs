@@ -18,7 +18,7 @@ void RegisterServices(IServiceCollection services)
 
     services.AddDbContext<NoteDb>(options => 
     {
-        options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("NotesDb"));
     });
 
     services.AddScoped<INoteRepository, NoteRepository>();
