@@ -22,7 +22,7 @@ public class NoteApi : IApi
             .WithTags("Getters");
 
 
-        app.MapPost("/notes", AddHotel)
+        app.MapPost("/notes", AddNote)
             .Accepts<Note>("application/json")
             .Produces<Note>(StatusCodes.Status201Created)
             .WithName("CreateNote")
@@ -41,19 +41,19 @@ public class NoteApi : IApi
         }
 
 
-        [Authorize] 
+        //[Authorize] 
         private async Task<IResult> GetAll(INoteRepository repository) => 
             Results.Extensions.Xml(await repository.GetAllNotesAsync());
 
 
-        [Authorize]
+        //[Authorize]
         private async Task<IResult>GetById(int id, INoteRepository repository) => 
             await repository.GetNoteAsync(id) is Note hotel
                 ? Results.Ok(hotel)
                 : Results.NotFound();
 
 
-        [Authorize]
+        //[Authorize]
         private async Task<IResult> SearchByName(string query, INoteRepository repository) =>
         await repository.GetNotesAsync(query) is IEnumerable<Note> hotels
             ? Results.Ok(hotels)
@@ -61,16 +61,16 @@ public class NoteApi : IApi
 
             
             
-        [Authorize] 
-        private async Task<IResult> AddHotel([FromBody] Note hotel, INoteRepository repository)
+        //[Authorize] 
+        private async Task<IResult> AddNote([FromBody] Note note, INoteRepository repository)
         {
-            await repository.AddNoteAsync(hotel);
+            await repository.AddNoteAsync(note);
             await repository.SaveAsync();
-            return Results.Created($"/hotels/{hotel.Id}", hotel);
+            return Results.Created($"/hotels/{note.Id}", note);
         }
 
 
-        [Authorize]
+        //[Authorize]
         private async Task<IResult> Update([FromBody] Note hotel, INoteRepository repository)
         {
             await repository.UpdateNoteAsync(hotel);
@@ -79,11 +79,11 @@ public class NoteApi : IApi
         }
 
    
-         [Authorize]
+         //[Authorize]
          private async Task<IResult> DeleteById(int id, INoteRepository repository)
-        {
+         {
             await repository.DeleteNoteAsync(id);
             await repository.SaveAsync();
             return Results.NoContent();
-        }
+         }
 }

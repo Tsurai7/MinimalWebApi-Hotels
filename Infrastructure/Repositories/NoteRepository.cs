@@ -18,7 +18,7 @@ public class NoteRepository : INoteRepository, IDisposable
 
     public async Task AddNoteAsync(Note note)
     {
-        note.CreatedAt = DateTime.UtcNow;
+        note.CreatedAt = DateTime.Now;
         await _context.Notes.AddAsync(note);
     }
 
@@ -31,7 +31,7 @@ public class NoteRepository : INoteRepository, IDisposable
 
         noteFromDb.Title = note.Title;
         noteFromDb.Content = note.Content;
-        noteFromDb.UpdatedAt = DateTime.UtcNow;
+        noteFromDb.UpdatedAt = DateTime.Now;
     }
 
     public async Task DeleteNoteAsync(int hotelId)
