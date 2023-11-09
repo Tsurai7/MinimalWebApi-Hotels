@@ -1,82 +1,70 @@
-public class HotelApi : IApi
+public class NoteApi : IApi
 {
     public void Register(WebApplication app)
     {
-        app.MapGet("/hotels", GetAll)
+        app.MapGet("/notes", GetAll)
             .Produces<List<Note>>(StatusCodes.Status200OK)
-            .WithName("GetAllHotels")
+            .WithName("GetAllNotes")
             .WithTags("Getters");
         
 
-        app.MapGet("/hotels/{id}", GetById)
+        app.MapGet("/notes/{id}", GetById)
             .Produces<Note>(StatusCodes.Status200OK)
-            .WithName("GetHotel")
+            .WithName("GetNote")
             .WithTags("Getters");
 
 
-        app.MapGet("/hotels/search/name/{query}",
+        app.MapGet("/notes/search/name/{query}",
            SearchByName)
             .Produces<List<Note>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
-            .WithName("SearchHotels")
+            .WithName("SearchNotes")
             .WithTags("Getters");
 
 
-        app.MapGet("/hotels/search/location/{coordinate}", 
-        SearchByCoordinates) 
-            .ExcludeFromDescription();
-
-
-        app.MapPost("/hotels", AddHotel)
+        app.MapPost("/notes", AddHotel)
             .Accepts<Note>("application/json")
             .Produces<Note>(StatusCodes.Status201Created)
-            .WithName("CreateHotel")
+            .WithName("CreateNote")
             .WithTags("Creators");
 
 
-        app.MapPut("/hotels", Update)
+        app.MapPut("/notes", Update)
             .Accepts<Note>("application/json")
-            .WithName("UpdateHotel")
+            .WithName("UpdateNote")
             .WithTags("Updaters");
 
 
-        app.MapDelete("hotels/{id}", DeleteById)
-            .WithName("DeleteHotel")
+        app.MapDelete("notes/{id}", DeleteById)
+            .WithName("DeleteNote")
             .WithTags("Deleters");
         }
 
 
         [Authorize] 
         private async Task<IResult> GetAll(INoteRepository repository) => 
-            Results.Extensions.Xml(await repository.GetHotelsAsync());
+            Results.Extensions.Xml(await repository.GetAllNotesAsync());
 
 
         [Authorize]
         private async Task<IResult>GetById(int id, INoteRepository repository) => 
-            await repository.GetHotelAsync(id) is Note hotel
+            await repository.GetNoteAsync(id) is Note hotel
                 ? Results.Ok(hotel)
                 : Results.NotFound();
 
 
         [Authorize]
         private async Task<IResult> SearchByName(string query, INoteRepository repository) =>
-        await repository.GetHotelsAsync(query) is IEnumerable<Note> hotels
+        await repository.GetNotesAsync(query) is IEnumerable<Note> hotels
             ? Results.Ok(hotels)
             : Results.NotFound(Array.Empty<Note>());
-
-
-        [Authorize] 
-        private async Task<IResult> SearchByCoordinates(Coordinate coordinate, INoteRepository repository) =>
-            await repository.GetHotelsAsync(coordinate) is IEnumerable<Note> hotels
-                ? Results.Ok(hotels)
-                : Results.NotFound(Array.Empty<Note>());
 
             
             
         [Authorize] 
         private async Task<IResult> AddHotel([FromBody] Note hotel, INoteRepository repository)
         {
-            await repository.AddHotelAsync(hotel);
+            await repository.AddNoteAsync(hotel);
             await repository.SaveAsync();
             return Results.Created($"/hotels/{hotel.Id}", hotel);
         }
@@ -85,7 +73,7 @@ public class HotelApi : IApi
         [Authorize]
         private async Task<IResult> Update([FromBody] Note hotel, INoteRepository repository)
         {
-            await repository.UpdateHotelAsync(hotel);
+            await repository.UpdateNoteAsync(hotel);
             await repository.SaveAsync();
             return Results.NoContent();
         }
@@ -94,7 +82,7 @@ public class HotelApi : IApi
          [Authorize]
          private async Task<IResult> DeleteById(int id, INoteRepository repository)
         {
-            await repository.DeleteHotelAsync(id);
+            await repository.DeleteNoteAsync(id);
             await repository.SaveAsync();
             return Results.NoContent();
         }

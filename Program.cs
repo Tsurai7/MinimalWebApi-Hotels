@@ -7,7 +7,7 @@ var app = builder.Build();
 Configure(app);
 
 new AuthApi().Register(app);
-new HotelApi().Register(app);
+new NoteApi().Register(app);
 
 app.Run();
 
@@ -16,7 +16,7 @@ void RegisterServices(IServiceCollection services)
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
 
-    services.AddDbContext<HotelDb>(options => 
+    services.AddDbContext<NoteDb>(options => 
     {
         options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
     });
@@ -42,7 +42,7 @@ void RegisterServices(IServiceCollection services)
             };
         });
     
-    services.AddTransient<IApi, HotelApi>();
+    services.AddTransient<IApi, NoteApi>();
     services.AddTransient<IApi, AuthApi>();
 }
 
@@ -56,7 +56,7 @@ void Configure(WebApplication app)
         app.UseSwagger();
         app.UseSwaggerUI();
         using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<HotelDb>();
+        var db = scope.ServiceProvider.GetRequiredService<NoteDb>();
         db.Database.EnsureCreated();
     }
 
