@@ -3,20 +3,20 @@ public class HotelApi : IApi
     public void Register(WebApplication app)
     {
         app.MapGet("/hotels", GetAll)
-            .Produces<List<Hotel>>(StatusCodes.Status200OK)
+            .Produces<List<Note>>(StatusCodes.Status200OK)
             .WithName("GetAllHotels")
             .WithTags("Getters");
         
 
         app.MapGet("/hotels/{id}", GetById)
-            .Produces<Hotel>(StatusCodes.Status200OK)
+            .Produces<Note>(StatusCodes.Status200OK)
             .WithName("GetHotel")
             .WithTags("Getters");
 
 
         app.MapGet("/hotels/search/name/{query}",
            SearchByName)
-            .Produces<List<Hotel>>(StatusCodes.Status200OK)
+            .Produces<List<Note>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .WithName("SearchHotels")
             .WithTags("Getters");
@@ -28,14 +28,14 @@ public class HotelApi : IApi
 
 
         app.MapPost("/hotels", AddHotel)
-            .Accepts<Hotel>("application/json")
-            .Produces<Hotel>(StatusCodes.Status201Created)
+            .Accepts<Note>("application/json")
+            .Produces<Note>(StatusCodes.Status201Created)
             .WithName("CreateHotel")
             .WithTags("Creators");
 
 
         app.MapPut("/hotels", Update)
-            .Accepts<Hotel>("application/json")
+            .Accepts<Note>("application/json")
             .WithName("UpdateHotel")
             .WithTags("Updaters");
 
@@ -47,34 +47,34 @@ public class HotelApi : IApi
 
 
         [Authorize] 
-        private async Task<IResult> GetAll(IHotelRepository repository) => 
+        private async Task<IResult> GetAll(INoteRepository repository) => 
             Results.Extensions.Xml(await repository.GetHotelsAsync());
 
 
         [Authorize]
-        private async Task<IResult>GetById(int id, IHotelRepository repository) => 
-            await repository.GetHotelAsync(id) is Hotel hotel
+        private async Task<IResult>GetById(int id, INoteRepository repository) => 
+            await repository.GetHotelAsync(id) is Note hotel
                 ? Results.Ok(hotel)
                 : Results.NotFound();
 
 
         [Authorize]
-        private async Task<IResult> SearchByName(string query, IHotelRepository repository) =>
-        await repository.GetHotelsAsync(query) is IEnumerable<Hotel> hotels
+        private async Task<IResult> SearchByName(string query, INoteRepository repository) =>
+        await repository.GetHotelsAsync(query) is IEnumerable<Note> hotels
             ? Results.Ok(hotels)
-            : Results.NotFound(Array.Empty<Hotel>());
+            : Results.NotFound(Array.Empty<Note>());
 
 
         [Authorize] 
-        private async Task<IResult> SearchByCoordinates(Coordinate coordinate, IHotelRepository repository) =>
-            await repository.GetHotelsAsync(coordinate) is IEnumerable<Hotel> hotels
+        private async Task<IResult> SearchByCoordinates(Coordinate coordinate, INoteRepository repository) =>
+            await repository.GetHotelsAsync(coordinate) is IEnumerable<Note> hotels
                 ? Results.Ok(hotels)
-                : Results.NotFound(Array.Empty<Hotel>());
+                : Results.NotFound(Array.Empty<Note>());
 
             
             
         [Authorize] 
-        private async Task<IResult> AddHotel([FromBody] Hotel hotel, IHotelRepository repository)
+        private async Task<IResult> AddHotel([FromBody] Note hotel, INoteRepository repository)
         {
             await repository.AddHotelAsync(hotel);
             await repository.SaveAsync();
@@ -83,7 +83,7 @@ public class HotelApi : IApi
 
 
         [Authorize]
-        private async Task<IResult> Update([FromBody] Hotel hotel, IHotelRepository repository)
+        private async Task<IResult> Update([FromBody] Note hotel, INoteRepository repository)
         {
             await repository.UpdateHotelAsync(hotel);
             await repository.SaveAsync();
@@ -92,7 +92,7 @@ public class HotelApi : IApi
 
    
          [Authorize]
-         private async Task<IResult> DeleteById(int id, IHotelRepository repository)
+         private async Task<IResult> DeleteById(int id, INoteRepository repository)
         {
             await repository.DeleteHotelAsync(id);
             await repository.SaveAsync();

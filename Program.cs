@@ -21,7 +21,7 @@ void RegisterServices(IServiceCollection services)
         options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
     });
 
-    services.AddScoped<IHotelRepository, HotelRepository>();
+    services.AddScoped<INoteRepository, NoteRepository>();
     services.AddSingleton<ITokenService>(new TokenService());
     services.AddSingleton<IUserRepository>(new UserRepository());
 
